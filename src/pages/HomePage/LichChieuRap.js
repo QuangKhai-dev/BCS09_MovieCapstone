@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Tabs } from 'antd';
 import { quanLyRapServ } from '../../services/quanLyRapServ';
+import LichChieuCumRap from './LichChieuCumRap';
 const LichChieuRap = () => {
   const [rap, setRap] = useState([]);
-
+  // const [maHeThongRap, setMaHeThongRap] = useState('');
   useEffect(() => {
     quanLyRapServ
       .getAllRap()
       .then((res) => {
         console.log(res);
         setRap(res.data.content);
+        // setMaHeThongRap(res.data.content[0]?.maHeThongRap);
       })
       .catch((err) => {
         console.log(err);
@@ -25,6 +27,10 @@ const LichChieuRap = () => {
           // style={{
           //   height: 220,
           // }}
+          // 4 key =" abc", key="xyz"
+          style={{
+            border: '1px solid #8080806e',
+          }}
           items={rap.map((item, index) => {
             return {
               // thuộc tính label tạo nội dung cho các nút tab
@@ -34,9 +40,14 @@ const LichChieuRap = () => {
               // disabled giúp ngăn chặn người dùng bấm mở tab nếu giá trị là true
               // disabled: true,
               // children giúp hiển thị nội dung của tab mà chúng ta muốn
-              children: `huu`,
+              children: <LichChieuCumRap maHeThongRap={item.maHeThongRap} />,
             };
           })}
+          // onChange={(activeKey) => {
+          //   console.log(activeKey);
+          //   // cứ mỗi lần ng dùng bấm sẽ set lại mã hệ thống rạp
+          //   setMaHeThongRap(activeKey);
+          // }}
         />
       </div>
     </div>

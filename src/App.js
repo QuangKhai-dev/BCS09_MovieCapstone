@@ -4,6 +4,7 @@ import { DatePicker } from 'antd';
 import { Routes, Route } from 'react-router-dom';
 import UserTemplate from './templates/UserTemplate/UserTemplate';
 import HomePage from './pages/HomePage/HomePage';
+import Login from './pages/Login/Login';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route element={<UserTemplate />} path="/">
           <Route element={<HomePage />} index></Route>
         </Route>
+        <Route element={<Login />} path="/login"></Route>
       </Routes>
     </>
   );
