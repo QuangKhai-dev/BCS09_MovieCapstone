@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-
+import { useSelector } from 'react-redux';
 const Header = () => {
+  const { user } = useSelector((state) => state.userSlice);
+  console.log(user);
   return (
     <header className="bg-white">
       <nav
@@ -62,12 +64,18 @@ const Header = () => {
           </NavLink>
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link
-            to={'/login'}
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Log in <span aria-hidden="true">→</span>
-          </Link>
+          {/* nếu người dùng chưa đăng nhập sẽ hiển thị login còn nếu đã đăng nhập
+          sẽ hiển thị tên người dùng */}
+          {user ? (
+            <p>{user.hoTen}</p>
+          ) : (
+            <Link
+              to={'/login'}
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              Log in <span aria-hidden="true">→</span>
+            </Link>
+          )}
         </div>
       </nav>
       <div className="lg:hidden" role="dialog" aria-modal="true">
