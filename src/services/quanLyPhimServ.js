@@ -6,6 +6,9 @@ export const quanLyPhimServ = {
     return https.get('/api/QuanLyPhim/LayDanhSachBanner');
   },
   getAllMovie: () => {
-    return https.get('/api/QuanLyPhim/LayDanhSachPhim?maNhom=GP09');
+    return https.get('/api/QuanLyPhim/LayDanhSachPhim?maNhom=GP08');
+  },
+  deleteMovie: (maPhim) => {
+    return https.delete(`/api/QuanLyPhim/XoaPhim?MaPhim=${maPhim}`);
   },
 };

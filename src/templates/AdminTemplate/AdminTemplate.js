@@ -7,10 +7,12 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 const { Header, Sider, Content } = Layout;
 const AdminTemplate = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
+  console.log(location);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -21,22 +23,30 @@ const AdminTemplate = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['1']}
+          // lấy localtion từ hook useLocation để kiểm tra xem người dùng đang đứng ở component nào để active nút menu
+          defaultSelectedKeys={[location.pathname]}
           items={[
             {
-              key: '1',
+              key: '/admin/manager-user',
               icon: <UserOutlined />,
-              label: 'nav 1',
+              label: <Link to={'/admin/manager-user'}>Quản lí người dùng</Link>,
             },
             {
-              key: '2',
+              key: '/admin',
               icon: <VideoCameraOutlined />,
-              label: 'nav 2',
+              label: <Link to={'/admin'}>Quản lí phim</Link>,
             },
             {
-              key: '3',
+              key: '/admin/add-movie',
+              icon: <VideoCameraOutlined />,
+              label: <Link to={'/admin/add-movie'}>Tạo phim</Link>,
+            },
+            {
+              key: '/admin/manager-order',
               icon: <UploadOutlined />,
-              label: 'nav 3',
+              label: (
+                <Link to={'/admin/manager-order'}>Quản lí lịch đặt vé</Link>
+              ),
             },
           ]}
         />

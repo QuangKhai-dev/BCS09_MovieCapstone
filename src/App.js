@@ -7,6 +7,8 @@ import HomePage from './pages/HomePage/HomePage';
 import Login from './pages/Login/Login';
 import AdminTemplate from './templates/AdminTemplate/AdminTemplate';
 import MovieManager from './pages/MovieManager/MovieManager';
+import UserManager from './pages/UserManager/UserManager';
+import AddMovie from './pages/AddMovie/AddMovie';
 
 function App() {
   return (
@@ -17,8 +19,11 @@ function App() {
         </Route>
         <Route element={<AdminTemplate />} path="/admin">
           <Route index element={<MovieManager />} />
+          <Route element={<UserManager />} path="manager-user" />
+          <Route element={<AddMovie />} path="add-movie" />
         </Route>
         <Route element={<Login />} path="/login"></Route>
+        {/* page 404  */}
       </Routes>
     </>
   );
