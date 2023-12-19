@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { quanLyPhimServ } from '../../services/quanLyPhimServ';
 import { Table, Tag, Space } from 'antd';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllMovieThunk } from '../../redux/slice/movieSlice';
 const MovieManager = () => {
-  const [listMovie, setListMovie] = useState([]);
-  console.log(listMovie);
+  const dispatch = useDispatch();
+  const { listMovie } = useSelector((state) => state.movieSlice);
+  // const [listMovie, setListMovie] = useState([]);
   const columns = [
     {
       // title là tên cột
@@ -53,7 +55,7 @@ const MovieManager = () => {
                   .then(() => {
                     // gọi render lại phim khi đã xoá
                     quanLyPhimServ.getAllMovie().then((res) => {
-                      setListMovie(res.data.content);
+                      dispatch(getAllMovieThunk());
                     });
                   })
                   .catch((err) => {
@@ -73,15 +75,22 @@ const MovieManager = () => {
     },
   ];
   useEffect(() => {
-    quanLyPhimServ
-      .getAllMovie()
-      .then((res) => {
-        console.log(res);
-        setListMovie(res.data.content);
+    // quanLyPhimServ
+    //   .getAllMovie()
+    //   .then((res) => {
+    //     console.log(res);
+    //     setListMovie(res.data.content);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    // gọi dữ liệu thông qua phương thức được tạo ra từ thunk
+    dispatch(
+      getAllMovieThunk({
+        hoTen: 'Đông',
+        gioiTinh: 'Nam',
       })
-      .catch((err) => {
-        console.log(err);
-      });
+    );
   }, []);
 
   return (

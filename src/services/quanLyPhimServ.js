@@ -11,4 +11,7 @@ export const quanLyPhimServ = {
   deleteMovie: (maPhim) => {
     return https.delete(`/api/QuanLyPhim/XoaPhim?MaPhim=${maPhim}`);
   },
+  addMovie: (data) => {
+    return https.post('/api/QuanLyPhim/ThemPhimUploadHinh', data);
+  },
 };

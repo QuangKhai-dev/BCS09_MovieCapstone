@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Carousel } from 'antd';
 import { quanLyPhimServ } from '../../services/quanLyPhimServ';
+import { useDispatch } from 'react-redux';
+import { endedLoading, startedLoading } from '../../redux/slice/loadingSlice';
 const contentStyle = {
   margin: 0,
   height: '160px',
@@ -56,18 +58,25 @@ const Banner = () => {
     prevArrow: <SamplePrevArrow />,
     arrows: true,
   };
-
+  const dispatch = useDispatch();
   const [listBanner, setListBanner] = useState([]);
 
   useEffect(() => {
+    // set trạng thái cho isActive thành true để loading xuất hiện
+    // sau khi gọi dữ liệu thành công sẽ tắt loading đi
+    // nếu thất bại cũng sẽ tắt loading
+    // dispatch(startedLoading());
     quanLyPhimServ
       .getAllBanner()
       .then((res) => {
-        console.log(res);
+        // console.log(res);
+        // dispatch(endedLoading());
+
         setListBanner(res.data.content);
       })
       .catch((err) => {
         console.log(err);
+        dispatch(endedLoading());
       });
   }, []);
 

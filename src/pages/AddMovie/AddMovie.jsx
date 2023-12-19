@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DatePicker, Space, Switch, Rate } from 'antd';
 import { useFormik } from 'formik';
+import './addMovie.css';
+import moment from 'moment';
+import { quanLyPhimServ } from '../../services/quanLyPhimServ';
 const AddMovie = () => {
   const formik = useFormik({
     initialValues: {
@@ -14,11 +17,38 @@ const AddMovie = () => {
       danhGia: '',
       hinhAnh: '',
     },
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       console.log(values);
+      // convert dữ liệu ngày giờ
+
+      const formData = new FormData();
+      for (let key in values) {
+        console.log(key);
+        if (key == 'hinhAnh') {
+          formData.append('File', values[key]);
+        } else if (key == 'ngayKhoiChieu') {
+          formData.append(key, moment(values[key]).format('DD-MM-YYYY'));
+        } else {
+          formData.append(key, values[key]);
+        }
+      }
+      formData.append('maNhom', 'GP08');
+      quanLyPhimServ
+        .addMovie(formData)
+        .then((res) => {
+          resetForm();
+          setImage('');
+          // thông báo
+          // Chuyển hướng người dùng về lại trang quản lí phim
+        })
+        .catch((err) => {
+          console.log(err);
+          // thông báo lí do chưa tạo được
+        });
     },
   });
 
+  const [image, setImage] = useState('');
   const {
     handleBlur,
     handleChange,
@@ -29,7 +59,7 @@ const AddMovie = () => {
     setFieldValue,
     reset,
   } = formik;
-  console.log(values);
+  console.log(values.hinhAnh.name);
   return (
     <div>
       <h2 className="font-bold text-2xl mb-5">Tạo mới phim</h2>
@@ -106,7 +136,9 @@ const AddMovie = () => {
           </label>
           <DatePicker
             onChange={(date, dateString) => {
-              setFieldValue('ngayKhoiChieu', dateString);
+              console.log(date);
+              setFieldValue('ngayKhoiChieu', date);
+              // setFieldValue('ngayKhoiChieu', dateString);
             }}
             format={'DD-MM-YYYY'}
             // changeOnBlur={handleBlur}
@@ -176,8 +208,8 @@ const AddMovie = () => {
           </label>
           <Rate
             value={values.danhGia}
-            onBlur={handleBlur}
             onChange={(value) => {
+              console.log(value);
               setFieldValue('danhGia', value);
             }}
           />
@@ -192,12 +224,25 @@ const AddMovie = () => {
           >
             Hình ảnh
           </label>
+          <img className="w-1/2" src={image} alt="" />
           <input
             type="file"
             name="hinhAnh"
             onBlur={handleBlur}
-            onChange={handleChange}
-            value={values.hinhAnh}
+            // Chỉ cho phép người dùng truyền lên dữ liệu là hình ảnh
+            accept="image/*"
+            onChange={(event) => {
+              // lấy dữ liệu về file được gửi lên
+              // console.log(event.target.files[0]);
+              const img = event.target.files[0];
+              // tạo đường dẫn cho tấm hình và lưu trữ vào state
+              if (img) {
+                const urlImg = URL.createObjectURL(img);
+                console.log(urlImg);
+                setImage(urlImg);
+              }
+              setFieldValue('hinhAnh', img);
+            }}
           />
           {/* {errors.taiKhoan && touched.taiKhoan ? (
             <p className="text-red-500 text-xs mt-1">{errors.taiKhoan}</p>
